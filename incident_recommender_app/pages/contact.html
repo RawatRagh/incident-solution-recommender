@@ -1,0 +1,27 @@
+<!--This is contact.html page which will extend base.html template with style.css applied-->
+{% extends "incident_recommender_app/pages/base.html" %}
+{% block content %}
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to Incident Solution Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="formclass">
+    <h2>CONTACT US</h2>
+    In case more information is required about the solution and how it can be adapated in your project, please reach out
+    to :-
+    <div class="divclass">
+        <ul>
+            <div class="divclass">
+                <li>Karan Gupta</li>
+            </div>
+            <div class="divclass">
+                <li>Sachin Kumar</li>
+            </div>
+        </ul>
+    </div>
+</div>
+{% endblock content %}
+</body>

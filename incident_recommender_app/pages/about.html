@@ -1,0 +1,36 @@
+<!--This is about.html page which will extend the base.html template with style.css applied-->
+{% extends "incident_recommender_app/pages/base.html" %}
+{% block content %}
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to Incident Solution Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="formclass">
+    <h2>ABOUT</h2>
+
+    <ul>
+        <div class="divclass">
+            <li>
+                This is a POC to demonstrate how we can use deep learning techniques to build solution recommendation
+                using existing data.
+            </li>
+        </div>
+        <div class="divclass">
+            <li>
+                Here we have used excel files which hold the incidents data for the model training
+            </li>
+        </div>
+        <div class="divclass">
+            <li>
+                Solution is customised using enviornment variables files. It can be configured to supply single input
+                column and then combination of output columns
+            </li>
+        </div>
+    </ul>
+
+</div>
+{% endblock content %}
+</body>

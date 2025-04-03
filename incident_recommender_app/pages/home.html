@@ -1,0 +1,40 @@
+<!--This is home.html page which will extend base.html template with style.css applied-->
+{% extends "incident_recommender_app/pages/base.html" %}
+{% block content %}
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to Incident Solution Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<script>
+var c = document.getElementById('kg');
+console.log(c.href);
+</script>
+<div class="formclass">
+    <h2>Welcome to Incident Solution Recommender</h2>
+    <div class="divclass">
+        Please choose the relevant menu option to proceed further
+        <ul>
+            <div class="divclass">
+                <li>
+                    Choose the "Train" menu option and supply the excel files to train model for prediction.
+                </li>
+            </div>
+            <div class="divclass">
+                <li>
+                    If you have already trained model, then you can go ahead and choose "Predict" option from the menu.
+                </li>
+            </div>
+            <div class="divclass">
+                <li>
+                    In case there is new data which needs to be supplied, then retrain model with all the data before
+                    prediction.
+                </li>
+            </div>
+        </ul>
+    </div>
+</div>
+</body>
+{% endblock content %}

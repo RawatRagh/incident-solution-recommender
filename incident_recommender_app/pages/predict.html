@@ -1,0 +1,107 @@
+<!--This is predict.html page which will extend base.html template with style.css applied and refers jquery js for ajax call-->
+{% extends "incident_recommender_app/pages/base.html" %}
+{% block content %}
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to Incident Solution Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+</head>
+<body>
+<div class="formclass">
+    <form>
+        <h2>PREDICTION</h2>
+        <div class="divclass">
+            <label>Enter the Short Description of the Incident</label>
+        </div>
+        <div class="divclass">
+            <input type="text" class="txtclass" data-toggle="tooltip" data-placement="top" title="Incident Description" size="50" id="short_desc">
+        </div>
+        <div class="divclass">
+            <Label>Select Number of Top Results for the Search Criteria</Label>
+            <label>   (This is an optional field and if not supplied, default value 5 will be used)</label>
+        </div>
+        <div class="divclass">
+            <input type="text" class="txtclass" data-toggle="tooltip" data-placement="top" title="No of results required" size="50" id="top_n_results">
+        </div>
+        <div class="divclass">
+            <button type="button" class="buttonclass"  onclick="clickBtn()">Search for similar issues</button>
+        </div>
+        <div id="search" class="panel" style="visibility: hidden;">
+            <div>
+                <div class="panel-heading"><span style="font-weight:bolder;">Search Criteria:</span></div>
+                <div class="panel-body"><span id="input"></span></div>
+            </div>
+        </div>
+        <div id="recommendation" class="panel" style="visibility: hidden;">
+            <div>
+                <div class="panel-heading"><span style="font-weight:bolder;">Solution Recommendation:</span></div>
+                <div id="recommendation_div" class="panel-body"><span id="output"></span></div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //this method will validate the input controls and then make ajax jquery call to the prediction.py code and then handle the results back from that call
+    function clickBtn() {
+        var txt = document.getElementById("short_desc").value;
+        var count = document.getElementById("top_n_results").value;
+        document.getElementById("recommendation_div").style.height = "unset";
+        document.getElementById("recommendation_div").style.overflowY = "unset";
+        //input control validation
+        if (txt == "") {
+            alert("Short Description Field must be filled out");
+            reset()
+            return false;
+        }
+        if (count != "" && (!Number(count) || count <= 0)) {
+            alert("No of Top Results Field should be integer and greater than 0");
+            reset()
+            return false;
+        }
+        document.getElementById("short_desc").value = "";
+        document.getElementById("top_n_results").value = "";
+
+        //ajax call with input values and then .done part of code will handle the results from the call.
+        $.ajax({
+            url: "{% url 'incident_recommender_app:call_isr' %}",
+            method: 'GET',
+            data: {"short_desc": txt, "top_n_results": count, "action": "predict"},
+            dataType: "text",
+            contentType: "application/json",
+        })
+            .done(function (data) {
+                result = data.toString()
+                document.getElementById("search").style.visibility="visible"
+                if (count == ""){
+                    document.getElementById("input").innerHTML = "Short Description: " + txt + "</br></br>" + "No of Top Results Searched: Not specified so default value 5 used";
+                }
+                else{
+                    document.getElementById("input").innerHTML = "Short Description: " + txt + "</br></br>" + "No of Top Results Searched: " + count;
+                }
+                document.getElementById("recommendation").style.visibility="visible"
+                document.getElementById("output").innerHTML = result;
+                if (result != "No Suitable Match Found" && result != "There is an error in the processing. Please contact the site owner"){
+                    document.getElementById("recommendation_div").style.height = "300px";
+                    document.getElementById("recommendation_div").style.overflowY = "scroll";
+                }
+                if (result == "There is an error in the processing. Please contact the site owner"){
+                    document.getElementById("output").style.color = "red";
+                }
+                document.getElementById("recommendation_div").scrollTop = 0;
+            });
+    }
+    // to reset the controls back to default state
+    function reset(){
+        document.getElementById("short_desc").value = "";
+        document.getElementById("top_n_results").value = "";
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("recommendation").style.visibility="hidden";
+        document.getElementById("input").innerHTML = "";
+        document.getElementById("search").style.visibility="hidden";
+    }
+</script>
+{% endblock content %}
+</body>
+</html>

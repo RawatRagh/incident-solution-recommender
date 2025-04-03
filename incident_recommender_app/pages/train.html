@@ -1,0 +1,62 @@
+<!--This is train.html page which will extend base.html template with style.css applied-->
+{% extends "incident_recommender_app/pages/base.html" %}
+{% block content %}
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Welcome to Incident Solution Recommender</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+</head>
+<body onsubmit="trainmodel()">
+<div class="formclass">
+    <form action="{% url 'incident_recommender_app:train' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>MODEL TRAINING </h2>
+        <div class="divclass">
+            <label style="margin-right:15px;">Select the excel files for Model Training: </label>
+            {{ form.excel_path }}
+        </div>
+        <div class="divclass">
+            <button type="submit" class="buttonclass" style="margin-left:285px;">Train the models Again.!!</button>
+        </div>
+        <div class="divclass" id="outputdiv"><span id="output" name="output" {{ style }}>{{ output }}</span></div>
+    </form>
+</div>
+<script>
+    //this method will be called on page post event to format the controls
+    function trainmodel() {
+		try {
+        $('#output').attr('style', '');
+        document.getElementById("outputdiv").style.visibility="visible"
+        document.getElementById("output").innerHTML = "Model Training in Progress. Please wait......!!!!!!!";
+        document.getElementById("output").style.color = "#2BD6B4";
+		}
+		catch (error)
+		{
+			console.log(error.message)
+		}
+       }
+    //this method will be called on file input control (imported from forms.py) selection change to validate only excel files are submitted
+    function checkfile(sender) {
+		document.getElementById("output").innerHTML = "";
+        var validExts = new Array(".xlsx", ".xls");
+		var filesInput = document.getElementById("id_excel_path");
+		for (var i= 0;i<filesInput.files.length; i++)
+		{
+			filename = filesInput.files[i].name;
+			fileExt = filename.substring(filename.lastIndexOf('.'));
+			if (validExts.indexOf(fileExt) < 0) {
+				alert("Invalid file selected, valid files are of " + validExts.toString() + " types.");
+				sender.value = '';
+				return false;
+            }
+		}
+		return true;
+    }
+
+
+</script>
+{% endblock content %}
+</body>
+</html>

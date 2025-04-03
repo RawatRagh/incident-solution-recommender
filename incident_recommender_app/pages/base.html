@@ -1,0 +1,10 @@
+<!--This is base.html which will be extended in all other html pages-->
+<h1>Incident Solution Recommender</h1>
+<nav>
+	<a href="{% url 'incident_recommender_app:home' %}">Home</a>
+    <a href="{% url 'incident_recommender_app:predict' %}">Predict</a>
+    <a href="{% url 'incident_recommender_app:train' %}">Train</a>
+	<a href="{% url 'incident_recommender_app:contact' %}">Contact</a>
+	<a href="{% url 'incident_recommender_app:about' %}">About</a>
+</nav>
+{% block content %}{% endblock content %}
